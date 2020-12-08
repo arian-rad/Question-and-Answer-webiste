@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-primary navbar-dark">
+    <a class="navbar-brand" href="{% url 'questions:home'%}">
+        <img src="https://karademy.ir/wp-content/uploads/2018/11/logo.png"  width="120" height="30" alt="home">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'questions:all_questions' %}">questions</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'questions:about'%}">about us</a>
+        </li>
+
+        <li class="nav-item active">
+            <a class="nav-link" href="#">help</a>
+          </li>
+        
+        <form class="form-inline my-2 my-lg-0 m-5">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
+      </form>       
+      </ul>
+      <button class="btn btn-success my-2 my-sm-0" type="submit">sign up</button>
+      <button class="btn btn-light my-2 my-sm-0 m-3" type="submit" >login</button>
+      
+    </div>
+  </nav>
