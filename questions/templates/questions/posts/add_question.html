@@ -1,0 +1,11 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+    <form method='POST'>
+    {% csrf_token %}
+    {{ QuestionForm.media }}
+    {{QuestionForm.as_p}}
+        
+        <input type="submit" value="Post">
+    </form>
+{% endblock %}
