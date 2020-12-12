@@ -37,7 +37,7 @@ class Answer(models.Model):
     body = RichTextField(verbose_name='متن جواب')
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
     date_edited = models.DateTimeField(auto_now=True, verbose_name='تاریخ ویرایش')
-    liked = ManyToManyField(User, default=None, blank=True, related_name='liked_answers') 
+    liked = models.ManyToManyField(User, default=None, blank=True, related_name='liked_answers') 
 
     class Meta:
         verbose_name = 'جواب'
@@ -46,10 +46,10 @@ class Answer(models.Model):
         db_table = 'answer'
 
 class AnswerLike(models.Model):
-    LIKE_CHOICES = {
-        'like': 'like',
-        'Unlike': 'Unlike',
-    }
+    LIKE_CHOICES = (
+        ('like', 'Like'),
+        ('Unlike', 'Unlike'),
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_answer_likes')
     liked_answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name='answer_like_rel')
     value = models.CharField(choices=LIKE_CHOICES, default='Like', max_length=10)
