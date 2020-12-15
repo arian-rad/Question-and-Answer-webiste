@@ -1,25 +1,40 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 from ckeditor.fields import RichTextField
 
-# !! needs makemigrations & migrate 12/12/2020 9:12 PM Arian Radmehr !!
+
+class Category(models.Model):
+    title = models.CharField(max_length=120, verbose_name='عنوان دسته بندی')
+    slug = models.SlugField(max_length=90, unique=True, allow_unicode=True, verbose_name='لینک یکتا')
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+    date_edited = models.DateTimeField(auto_now=True, verbose_name='تاریخ ویرایش')      
+    
+    class Meta:
+        verbose_name = 'دسته بندی'
+        verbose_name_plural = ' دسته بندی ها'
+        ordering = ('-date_created', )
+        db_table = 'category'
+
+    def __str__(self):
+        return self.title
+    
 
 class Question(models.Model):    
 
     title = models.CharField(max_length=120, verbose_name='عنوان پرسش')    
     text = RichTextField(verbose_name='متن پرسش')
     slug = models.SlugField(max_length=90, unique=True, verbose_name='لینک یکتا', blank=True, null=True)    
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='پرسشگر', related_name='user_questions', blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=settings.AUTH_USER_MODEL, verbose_name='پرسشگر', related_name='user_questions') # , blank=True, null=True
     # blank and null are both set to True for user beacuse i still dont know how to make djagno to assging the 
     # currently logged in  user as default
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
     date_edited = models.DateTimeField(auto_now=True, verbose_name='تاریخ ویرایش')
     # date_created and date_edited have auto_now_add, auto_now property because users are not allowed
     # to edit DateTime field P.S: blank and null are False by default
-    category = models.ManyToManyField('Category', verbose_name='دسته بندی', related_name='category_questions')
-    # num_of_likes = models.IntegerField()
+    category = models.ForeignKey(Category, on_delete=models.CASCADE ,verbose_name='دسته بندی', related_name='category_questions')    
     # approved_answer = BooleanField(default=False)
-    # num_of_reports = models.IntegerField()    
+        
 
     class Meta:
         verbose_name = 'سوال'
@@ -55,19 +70,4 @@ class AnswerLike(models.Model):
     value = models.CharField(choices=LIKE_CHOICES, default='Like', max_length=10)
 
 
-
-class Category(models.Model):
-    title = models.CharField(max_length=120, verbose_name='عنوان دسته بندی')
-    slug = models.SlugField(max_length=90, unique=True, allow_unicode=True, verbose_name='لینک یکتا')
-    date_created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
-    date_edited = models.DateTimeField(auto_now=True, verbose_name='تاریخ ویرایش')      
-    
-    class Meta:
-        verbose_name = 'دسته بندی'
-        verbose_name_plural = ' دسته بندی ها'
-        ordering = ('-date_created', )
-        db_table = 'category'
-
-    def __str__(self):
-        return self.title
-    
+# class Tag(models.Model):

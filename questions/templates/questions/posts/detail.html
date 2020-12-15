@@ -3,14 +3,17 @@
 {% block content %}
 <div class="card" style="width: 18rem;">
     <div class="card-body">
-      <h5 class="card-title">{{question.title}}</h5>
       <h6 class="card-subtitle mb-2 text-muted">{{question.user}}</h6>
+      <h5 class="card-title">{{question.title}}</h5>
       <p class="card-text">{{question.text | safe}}</p>
-      {% for cat in question.category.all %}
+      <p class="btn btn-info btn-sm">{{question.category}}</p>
+      <br><br>
+      <time class="card-subtitle mb-2 text-muted">{{question.date_created}}</time>
+      <!-- {% for cat in question.category.all %}
       <h6 class="btn btn-info btn-sm">{{cat}}</h6>
       <br>
       <time class="card-subtitle mb-2 text-muted">{{question.date_created}}</time>
-      {% endfor %}
+      {% endfor %} -->
     </div>
   </div>
 {% endblock %}

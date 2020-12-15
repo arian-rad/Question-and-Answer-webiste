@@ -6,13 +6,15 @@
   <div class="container m-5"  style="width: 40rem;"> 
     <div class="card">
       <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">By :{{user}}</h6>
         <h4 class="card-title">{{question.title}}</h4>
         <p class="card-text">{{question.text | safe}}</p>
-        <time class="card-subtitle mb-2 text-muted">{{question.date_created}}</time>
-        <br>
-        {% for cat in question.category.all %}
+        <!-- <time class="card-subtitle mb-2 text-muted">{{question.date_created}}</time> -->
+        <br>        
+        <h6 class="btn btn-info btn-sm">{{question.category}}</h6>
+        <!-- {% for cat in question.category.all %}
         <h6 class="btn btn-info btn-sm">{{cat}}</h6>
-        {% endfor %}
+        {% endfor %} -->
         <br>
         <a href="{% url 'questions:question_detail' question.id %}" class="card-link">more</a>
       </div>
