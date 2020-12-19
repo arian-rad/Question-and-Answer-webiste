@@ -21,19 +21,9 @@ def add_question(request):
     if request.method == 'POST':
         question_form = QuestionForm(request.POST)
         if question_form.is_valid():
-            curent_user = request.user
             cleaned_data = question_form.cleaned_data
-            question = Question(title=cleaned_data['title'], text=cleaned_data['text'], category=cleaned_data['category'], user=curent_user)
-            print('user id: ', curent_user.id)
+            question = Question(title=cleaned_data['title'], text=cleaned_data['text'], category=cleaned_data['category'])
             question.save()
-
-
-            # instance = question_form.save(commit=False)
-            # instance.user = request.user.username
-            # # question_form.user = request.user.username
-            # # question_form.save()
-            # instance.save()
-
             return redirect('questions:all_questions')
 
     else:
