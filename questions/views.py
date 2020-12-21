@@ -35,6 +35,9 @@ class QuestionDetailView(DetailView):
     template_name = 'questions/posts/detail.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        self.object.num_of_views += 1
+        self.object.save()
+        self.object.refresh_from_db()
         return context
 
 # def add_question(request):

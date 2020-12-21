@@ -33,6 +33,7 @@ class Question(models.Model):
     # date_created and date_edited have auto_now_add, auto_now property because users are not allowed
     # to edit DateTime field P.S: blank and null are False by default
     category = models.ForeignKey(Category, on_delete=models.CASCADE ,verbose_name='دسته بندی', related_name='category_questions')    
+    num_of_views = models.IntegerField(default=0, verbose_name='تعداد بازدید')
     # approved_answer = BooleanField(default=False)
         
 
