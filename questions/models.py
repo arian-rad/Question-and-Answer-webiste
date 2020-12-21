@@ -25,7 +25,7 @@ class Question(models.Model):
     title = models.CharField(max_length=120, verbose_name='عنوان پرسش')    
     text = RichTextField(verbose_name='متن پرسش')
     slug = models.SlugField(max_length=90, unique=True, verbose_name='لینک یکتا', blank=True, null=True)    
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, verbose_name='پرسشگر', related_name='user_questions',null=True, blank=True) # , blank=True, null=True
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, verbose_name='پرسشگر', related_name='user_questions',null=True, blank=True) # , blank=True, null=True default settings.AUTH_USER_MODE
     # blank and null are both set to True for user beacuse i still dont know how to make djagno to assging the 
     # currently logged in  user as default
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')

@@ -45,7 +45,8 @@ class QuestionDetailView(DetailView):
 #         question_form = QuestionForm(request.POST)
 #         if question_form.is_valid():
 #             cleaned_data = question_form.cleaned_data
-#             question = Question(title=cleaned_data['title'], text=cleaned_data['text'], category=cleaned_data['category'])
+#             current_user = request.user
+#             question = Question(title=cleaned_data['title'], text=cleaned_data['text'], category=cleaned_data['category'], user=current_user)
 #             question.save()
 #             return redirect('questions:all_questions')
 
@@ -59,3 +60,31 @@ class QuestionCreateView(CreateView):
     form_class = QuestionForm
     template_name = 'questions/posts/add_question.html'
     success_url = reverse_lazy('questions:all_questions')
+
+# class QuestionCreateView(CreateView):
+#     model = Question
+#     form_class = QuestionForm
+#     template_name = 'questions/posts/add_question.html'
+#     success_url = reverse_lazy('questions:all_questions')
+
+#     def get(self, request):
+#          question_form = QuestionForm()
+#          return render(request,'questions/posts/add_question.html', {'QuestionForm': question_form})
+    
+#     def post(self, request):
+#         question_form = QuestionForm(request.POST)
+#         if question_form.is_valid():
+#             cleaned_data = question_form.cleaned_data
+#             current_user = request.user
+#             question = Question(title=cleaned_data['title'], text=cleaned_data['text'], category=cleaned_data['category'], user=current_user)
+#             question.save()
+#             return redirect('questions:all_questions')
+
+#             error:CSRF verification failed. Request aborted.
+
+
+
+
+
+
+    
