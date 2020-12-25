@@ -9,11 +9,6 @@
       <a href="{% url 'questions:category_detail' question.category.pk %}" class="btn btn-info btn-sm">{{question.category}}</a>
       <br><br>
       <time class="card-subtitle mb-2 text-muted">{{question.date_created}}</time>
-      <!-- {% for cat in question.category.all %}
-      <h6 class="btn btn-info btn-sm">{{cat}}</h6>
-      <br>
-      <time class="card-subtitle mb-2 text-muted">{{question.date_created}}</time>
-      {% endfor %} -->
     </div>
   </div>
 {% endblock %}

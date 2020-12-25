@@ -2,7 +2,8 @@
 
 {% block content %}
 
-{% comment %} {% for question in all_posts%}  {% endcomment %}
+{% comment %} {% for question in all_posts%} for function based view  {% endcomment %}
+
 {% for question in object_list %}
   <div class="container m-5"  style="width: 40rem;"> 
     <div class="card">
@@ -12,13 +13,9 @@
         <p class="card-text">{{question.text | safe | truncatewords:20}}</p>
         <br>        
         <a href="{% url 'questions:category_detail' question.category.id %}" class="btn btn-info btn-sm">{{question.category}}</a>
-        <!--   {% for cat in question.category.all %}
-        <h6 class="btn btn-info btn-sm">{{cat}}</h6>
-        {% endfor %} -->
         <br>
         <p class="card-text text-muted">views:{{question.num_of_views}}</p>
         <a href="{% url 'questions:question_detail' question.id %}" class="card-link">more</a>
-<!--        <a href="questions/templates/questions/posts/allPosts.html" class="card-link">more</a>-->
 
       </div>
     </div>
