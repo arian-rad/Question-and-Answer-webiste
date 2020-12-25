@@ -35,6 +35,7 @@ class QuestionDetailView(DetailView):
     template_name = 'questions/posts/detail.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # context['category1'] = self.object.category
         self.object.num_of_views += 1
         self.object.save()
         self.object.refresh_from_db()
@@ -91,7 +92,7 @@ class CategoryQuestionsDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         # context['category'] = Category.objects.get(id=pk)
         context['cat_ques'] = context['category'].category_questions.all()
-        context['questions'] = Question.objects.all()
+        # context['questions'] = Question.objects.all()
         # print("CATEGORY TITLE: ", context['category'].title)
         # print("QUESTION_TITLE: ", context['cat_ques'][1].title)
 
