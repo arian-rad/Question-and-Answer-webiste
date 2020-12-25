@@ -30,8 +30,13 @@
         <button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
       </form>       
       </ul>
-      <button class="btn btn-success my-2 my-sm-0" type="submit">sign up</button>
-      <button class="btn btn-light my-2 my-sm-0 m-3" type="submit" >login</button>
-      
+<!--      <button class="btn btn-success my-2 my-sm-0" type="submit">sign up</button>-->
+        {% if request.user.is_authenticated %}
+            <a class="btn btn-light my-2 my-sm-0 m-3" href="{% url 'accounts:logout' %}">logout</a>
+        {% else %}
+            <a class="btn btn-light my-2 my-sm-0 m-3" href="{% url 'accounts:login' %}">login</a>
+            <a class="btn btn-success my-2 my-sm-0" href="{% url 'accounts:signup' %}">sign up</a>
+        {% endif %}
+
     </div>
   </nav>

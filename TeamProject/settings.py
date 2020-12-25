@@ -42,9 +42,13 @@ INSTALLED_APPS = [
     # Third party
 
     # my apps
-    'questions.apps.QuestionsConfig' ,  # quesitons
-
+    'questions.apps.QuestionsConfig' ,  # questions
+    'accounts.apps.AccountsConfig',  # accounts
 ]
+
+AUTH_USER_MODEL = 'accounts.User'
+LOGIN_REDIRECT_URL = '/questions/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

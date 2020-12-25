@@ -7,14 +7,14 @@
   <div class="container m-5"  style="width: 40rem;"> 
     <div class="card">
       <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">By :{{question.user}}</h6> 
+        <h6 class="card-subtitle mb-2 text-muted">By :{{question.user.username}}</h6>
         <!-- was by: {{user}}=> AnonymousUser -->
         <h4 class="card-title">{{question.title}}</h4>
         <p class="card-text">{{question.text | safe | truncatewords:20}}</p>
         <!-- <time class="card-subtitle mb-2 text-muted">{{question.date_created}}</time> -->
         <br>        
-        <h6 class="btn btn-info btn-sm">{{question.category}}</h6>
-        <!-- {% for cat in question.category.all %}
+<!--        <a href="{% url 'questions:category_detail' question.category.id %}" class="btn btn-info btn-sm">{{question.category}}</a>-->
+        <!--   {% for cat in question.category.all %}
         <h6 class="btn btn-info btn-sm">{{cat}}</h6>
         {% endfor %} -->
         <br>

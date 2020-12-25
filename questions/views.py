@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from questions.models import Question
+from questions.models import Question,Category
 from questions.forms import QuestionForm
 from django.views.generic import TemplateView, ListView, DetailView, CreateView
 from django.urls import reverse_lazy
@@ -54,6 +54,14 @@ class QuestionDetailView(DetailView):
 #         question_form = QuestionForm()
 #         return render(request,'questions/posts/add_question.html', {'QuestionForm': question_form})
 
+#
+# class QuestionCreateView(CreateView):
+#     model = Question
+#     form_class = QuestionForm
+#     template_name = 'questions/posts/add_question.html'
+#     success_url = reverse_lazy('questions:all_questions')
+
+
 
 class QuestionCreateView(CreateView):
     model = Question
@@ -61,30 +69,31 @@ class QuestionCreateView(CreateView):
     template_name = 'questions/posts/add_question.html'
     success_url = reverse_lazy('questions:all_questions')
 
-# class QuestionCreateView(CreateView):
-#     model = Question
-#     form_class = QuestionForm
-#     template_name = 'questions/posts/add_question.html'
-#     success_url = reverse_lazy('questions:all_questions')
+    def get(self, request):
+         question_form = QuestionForm()
+         return render(request,'questions/posts/add_question.html', {'form': question_form})
 
-#     def get(self, request):
-#          question_form = QuestionForm()
-#          return render(request,'questions/posts/add_question.html', {'QuestionForm': question_form})
-    
-#     def post(self, request):
-#         question_form = QuestionForm(request.POST)
-#         if question_form.is_valid():
-#             cleaned_data = question_form.cleaned_data
-#             current_user = request.user
-#             question = Question(title=cleaned_data['title'], text=cleaned_data['text'], category=cleaned_data['category'], user=current_user)
-#             question.save()
-#             return redirect('questions:all_questions')
-
-#             error:CSRF verification failed. Request aborted.
+    def post(self, request):
+        question_form = QuestionForm(request.POST)
+        if question_form.is_valid():
+            cleaned_data = question_form.cleaned_data
+            current_user = request.user
+            question = Question(title=cleaned_data['title'], text=cleaned_data['text'], category=cleaned_data['category'], user=current_user)
+            question.save()
+            return redirect('questions:all_questions')
 
 
 
+# class CategoryQuestionsDetailView(DetailView):
+#     model = Category
+#     template_name = 'questions/categories/category_questions.html'
+#     def get_context_data(self, **kwargs):
+#         context = super(CategoryQuestionsDetailView, self).get_context_data(**kwargs)
+#         # context['category'] = Category.objects.get(id=pk)
+#         context['cat_ques'] = context['category'].category_questions.all()
+#         context['questions'] = Question.objects.all()
+#         # print("CATEGORY TITLE: ", context['category'].title)
+#         # print("QUESTION_TITLE: ", context['cat_ques'][1].title)
+#
+#         return context
 
-
-
-    

@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from accounts.models import User
 from django.conf import settings
 from ckeditor.fields import RichTextField
 
@@ -25,8 +26,8 @@ class Question(models.Model):
     title = models.CharField(max_length=120, verbose_name='عنوان پرسش')    
     text = RichTextField(verbose_name='متن پرسش')
     slug = models.SlugField(max_length=90, unique=True, verbose_name='لینک یکتا', blank=True, null=True)    
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None, verbose_name='پرسشگر', related_name='user_questions',null=True, blank=True) # , blank=True, null=True default settings.AUTH_USER_MODE
-    # blank and null are both set to True for user beacuse i still dont know how to make djagno to assging the 
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=settings.AUTH_USER_MODEL, verbose_name='پرسشگر', related_name='user_questions',null=True, blank=True) # , blank=True, null=True default settings.AUTH_USER_MODE
+    # blank and null are both set to True for user because i still don't know how to make django to assigning the
     # currently logged in  user as default
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
     date_edited = models.DateTimeField(auto_now=True, verbose_name='تاریخ ویرایش')
@@ -40,7 +41,7 @@ class Question(models.Model):
     class Meta:
         verbose_name = 'سوال'
         verbose_name_plural = 'سوال ها'
-        ordering = ('-date_created',) # - is beacuse we want to see the latest questions first!
+        ordering = ('-date_created',) # - is because we want to see the latest questions first!
         db_table = 'question'
 
     def __str__(self):
@@ -60,6 +61,8 @@ class Answer(models.Model):
         verbose_name_plural = 'جواب ها'
         # ordering = want to be num of likes but how?
         db_table = 'answer'
+
+
 
 class AnswerLike(models.Model):
     LIKE_CHOICES = (
