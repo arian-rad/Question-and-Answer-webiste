@@ -84,16 +84,16 @@ class QuestionCreateView(CreateView):
 
 
 
-# class CategoryQuestionsDetailView(DetailView):
-#     model = Category
-#     template_name = 'questions/categories/category_questions.html'
-#     def get_context_data(self, **kwargs):
-#         context = super(CategoryQuestionsDetailView, self).get_context_data(**kwargs)
-#         # context['category'] = Category.objects.get(id=pk)
-#         context['cat_ques'] = context['category'].category_questions.all()
-#         context['questions'] = Question.objects.all()
-#         # print("CATEGORY TITLE: ", context['category'].title)
-#         # print("QUESTION_TITLE: ", context['cat_ques'][1].title)
-#
-#         return context
+class CategoryQuestionsDetailView(DetailView):
+    model = Category
+    template_name = 'questions/categories/category_questions.html'
+    def get_context_data(self, **kwargs):
+        context = super(CategoryQuestionsDetailView, self).get_context_data(**kwargs)
+        # context['category'] = Category.objects.get(id=pk)
+        context['cat_ques'] = context['category'].category_questions.all()
+        context['questions'] = Question.objects.all()
+        # print("CATEGORY TITLE: ", context['category'].title)
+        # print("QUESTION_TITLE: ", context['cat_ques'][1].title)
+
+        return context
 

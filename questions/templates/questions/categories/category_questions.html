@@ -4,10 +4,10 @@
 <div class="card" style="width: 40rem;">
     <div class="card-body">
       <h5 class="card-title">Questions with {{category.title}} category:</h5>
-<!--      {% for q in cat_ques %}-->
-<!--        <a href="{% url 'questions:question_detail' q.pk %}">{{q.title}}</a>-->
-<!--        <br>-->
-<!--      {% endfor %}-->
+      {% for q in cat_ques %}
+        <a href="{% url 'questions:question_detail' q.pk %}">{{q.title}}</a>
+        <br>
+      {% endfor %}
     </div>
   </div>
 {% endblock %}

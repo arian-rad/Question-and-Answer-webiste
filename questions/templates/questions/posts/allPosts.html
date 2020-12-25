@@ -13,7 +13,7 @@
         <p class="card-text">{{question.text | safe | truncatewords:20}}</p>
         <!-- <time class="card-subtitle mb-2 text-muted">{{question.date_created}}</time> -->
         <br>        
-<!--        <a href="{% url 'questions:category_detail' question.category.id %}" class="btn btn-info btn-sm">{{question.category}}</a>-->
+        <a href="{% url 'questions:category_detail' question.category.id %}" class="btn btn-info btn-sm">{{question.category}}</a>
         <!--   {% for cat in question.category.all %}
         <h6 class="btn btn-info btn-sm">{{cat}}</h6>
         {% endfor %} -->
