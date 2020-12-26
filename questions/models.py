@@ -36,6 +36,9 @@ class Question(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE ,verbose_name='دسته بندی', related_name='category_questions')    
     num_of_views = models.IntegerField(default=0, verbose_name='تعداد بازدید')
     # approved_answer = BooleanField(default=False)
+
+    def get_num_of_answers(self):
+        return self.question_answers.count()
         
 
     class Meta:
@@ -49,12 +52,12 @@ class Question(models.Model):
 
 
 class Answer(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='پاسخ دهنده', related_name='answer_rel')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, default=settings.AUTH_USER_MODEL, verbose_name='پاسخ دهنده', related_name='answer_rel')
     related_question = models.ForeignKey(Question, on_delete=models.CASCADE, verbose_name='سوال مربوطه', related_name='question_answers')
     body = RichTextField(verbose_name='متن جواب')
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
     date_edited = models.DateTimeField(auto_now=True, verbose_name='تاریخ ویرایش')
-    liked = models.ManyToManyField(User, default=None, blank=True, related_name='liked_answers') 
+    # liked = models.ManyToManyField(User, default=None, blank=True, related_name='liked_answers')
 
     class Meta:
         verbose_name = 'جواب'

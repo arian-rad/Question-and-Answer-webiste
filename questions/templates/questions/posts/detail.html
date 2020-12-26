@@ -9,6 +9,21 @@
       <a href="{% url 'questions:category_detail' question.category.pk %}" class="btn btn-info btn-sm">{{question.category}}</a>
       <br><br>
       <time class="card-subtitle mb-2 text-muted">{{question.date_created}}</time>
+      <a href="{% url 'questions:create_answer' question.id %}" class="card-link">answer</a>
     </div>
   </div>
+
+
+
+
+{% for ans in answers %}
+  <div class="container m-5"  style="width: 40rem;">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">By :{{ans.author.username}}</h6>
+        <p class="card-text">{{ ans.body | safe }}</p>
+      </div>
+    </div>
+  </div>
+{% endfor %}
 {% endblock %}

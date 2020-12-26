@@ -1,8 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from questions.models import Question,Category
-from questions.forms import QuestionForm
+from questions.models import Question, Category, Answer
+from questions.forms import QuestionForm, AnswerForm
 from django.views.generic import TemplateView, ListView, DetailView, CreateView
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
 class HomeTemplateView(TemplateView):
@@ -27,6 +29,7 @@ class QuestionDetailView(DetailView):
     template_name = 'questions/posts/detail.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['answers'] = self.object.question_answers.all()
         # context['category1'] = self.object.category
         self.object.num_of_views += 1
         self.object.save()
@@ -41,7 +44,7 @@ class QuestionDetailView(DetailView):
 #     success_url = reverse_lazy('questions:all_questions')
 
 
-
+@method_decorator(login_required, name='dispatch')
 class QuestionCreateView(CreateView):
     model = Question
     form_class = QuestionForm
@@ -72,4 +75,21 @@ class CategoryQuestionsDetailView(DetailView):
         context['cat_ques'] = context['category'].category_questions.all()  # related_name = category_questions
 
         return context
+
+@method_decorator(login_required, name='dispatch')
+class AnswerCreateView(CreateView):
+    model = Answer
+    template_name = 'questions/posts/create_answer.html'
+    form_class = AnswerForm
+    success_url = reverse_lazy('questions:question_detail')
+
+    def post(self, request, pk):
+        answer_form = AnswerForm(request.POST)
+        if answer_form.is_valid():
+            cleaned_data = answer_form.cleaned_data
+            current_user = request.user
+            question = get_object_or_404(Question, id=pk)
+            answer = Answer(body=cleaned_data['body'], related_question=question, author=current_user)
+            answer.save()
+            return redirect('questions:question_detail', pk)
 
