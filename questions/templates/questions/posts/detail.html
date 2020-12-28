@@ -25,12 +25,13 @@
         <p class="card-text text-muted mt-4">likes:{{ans.get_num_of_likes}}</p>
         <form method="POST" action="{% url 'questions:like_answer' ans.id %}">
           {% csrf_token %}
+            {% if liked %}
+              <button class="btn btn-danger btn-sm" type="submit" name="answer_id" value="{{ ans.id }}">UnLike</button>
 
-<!--            <button class="btn btn-danger btn-sm" type="submit" name="answer_id" value="{{ ans.id }}">UnLike</button>-->
-
+            {% else %}
               <button class="btn btn-success btn-sm" type="submit" name="answer_id" value="{{ ans.id }}">Like</button>
 
-
+            {% endif %}
         </form>
       </div>
     </div>

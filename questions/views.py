@@ -51,12 +51,12 @@ class QuestionDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['answers'] = self.object.question_answers.all()
         # answer = get_object_or_404(Answer, id=self.context['pk'])
-        #answer = get_object_or_404(Answer, id=self.kwargs['pk'])
+        answer = get_object_or_404(Answer, id=self.kwargs['pk'])
         # context['category1'] = self.object.category
-        #liked = False
-        #if answer.likes.filter(id=self.request.user.id).exists():
-            #liked = True
-        #context['liked'] = liked
+        liked = False
+        if answer.likes.filter(id=self.request.user.id).exists():
+            liked = True
+        context['liked'] = liked
         self.object.num_of_views += 1
         self.object.save()
         self.object.refresh_from_db()
