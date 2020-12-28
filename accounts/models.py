@@ -5,7 +5,8 @@ class User(AbstractUser):
     phone = models.CharField(max_length=15, null=True, verbose_name='تلفن همراه')
 
     def __str__(self):
-        if not self.get_full_name() is None:
+        if self.get_full_name():
           return self.get_full_name()
         else:
-            pass
+            return self.get_username()
+

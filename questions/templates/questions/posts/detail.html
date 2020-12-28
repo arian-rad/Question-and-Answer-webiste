@@ -22,6 +22,10 @@
       <div class="card-body">
         <h6 class="card-subtitle mb-2 text-muted">By :{{ans.author.username}}</h6>
         <p class="card-text">{{ ans.body | safe }}</p>
+        <form method="POST">
+          {% csrf_token %}
+          <button  action="{% url 'questions:like_answer' ans.id %}" class="btn btn-primary btn-sm" type="submit" name="answer_id" value="{{ ans.id }}">upvote</button>
+        </form>
       </div>
     </div>
   </div>

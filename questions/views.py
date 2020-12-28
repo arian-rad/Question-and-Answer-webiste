@@ -2,9 +2,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from questions.models import Question, Category, Answer
 from questions.forms import QuestionForm, AnswerForm
 from django.views.generic import TemplateView, ListView, DetailView, CreateView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.http import HttpResponseRedirect
 
 
 class HomeTemplateView(TemplateView):
@@ -23,6 +24,18 @@ class QuestionListView(ListView):
 # def question_detail_view(request, question_id):
 #     question = get_object_or_404(Question, id=question_id)
 #     return render(request, 'questions/posts/detail.html', {'question':question})
+
+@method_decorator(login_required, name='dispatch')
+class AnswerLikeCreateVeiw(CreateView):
+    model = Answer
+    template_name = 'questions/posts/detail.html'
+    success_url = reverse_lazy('questions:question_detail')
+
+    def post(self, request, pk):
+        answer = get_object_or_404(Answer, id=request.POST.get('answer_id'))
+        answer.likes.add(request.user)
+        return HttpResponseRedirect(reverse('questions:question_detail', args=[str(pk)]))
+
 
 class QuestionDetailView(DetailView):
     model = Question
@@ -92,4 +105,3 @@ class AnswerCreateView(CreateView):
             answer = Answer(body=cleaned_data['body'], related_question=question, author=current_user)
             answer.save()
             return redirect('questions:question_detail', pk)
-

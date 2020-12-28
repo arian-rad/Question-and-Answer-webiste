@@ -13,5 +13,6 @@ urlpatterns = [
     path('questions/<int:pk>/detail/', views.QuestionDetailView.as_view(), name='question_detail'),
     path('about/', views.AboutTemplateView.as_view(), name='about'),
     path('category/<int:pk>/questions/', views.CategoryQuestionsDetailView.as_view(), name='category_detail'),
-    path('create_answer/<int:pk>', views.AnswerCreateView.as_view(), name='create_answer'),
+    path('create_answer/<int:pk>/', views.AnswerCreateView.as_view(), name='create_answer'),
+    path('like/<int:pk>/', views.AnswerLikeCreateVeiw.as_view(), name='like_answer' ),
 ]

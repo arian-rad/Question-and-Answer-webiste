@@ -21,14 +21,11 @@ class Category(models.Model):
         return self.title
     
 
-class Question(models.Model):    
-
+class Question(models.Model):
     title = models.CharField(max_length=120, verbose_name='عنوان پرسش')    
     text = RichTextField(verbose_name='متن پرسش')
     slug = models.SlugField(max_length=90, unique=True, verbose_name='لینک یکتا', blank=True, null=True)    
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=settings.AUTH_USER_MODEL, verbose_name='پرسشگر', related_name='user_questions',null=True, blank=True) # , blank=True, null=True default settings.AUTH_USER_MODE
-    # blank and null are both set to True for user because i still don't know how to make django to assigning the
-    # currently logged in  user as default
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=settings.AUTH_USER_MODEL, verbose_name='پرسشگر', related_name='user_questions') # , blank=True, null=True default settings.AUTH_USER_MODE
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
     date_edited = models.DateTimeField(auto_now=True, verbose_name='تاریخ ویرایش')
     # date_created and date_edited have auto_now_add, auto_now property because users are not allowed
@@ -57,7 +54,7 @@ class Answer(models.Model):
     body = RichTextField(verbose_name='متن جواب')
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
     date_edited = models.DateTimeField(auto_now=True, verbose_name='تاریخ ویرایش')
-    # liked = models.ManyToManyField(User, default=None, blank=True, related_name='liked_answers')
+    likes = models.ManyToManyField(User, default=None, blank=True, related_name='like_answers')
 
     class Meta:
         verbose_name = 'جواب'
@@ -67,14 +64,14 @@ class Answer(models.Model):
 
 
 
-class AnswerLike(models.Model):
-    LIKE_CHOICES = (
-        ('like', 'Like'),
-        ('Unlike', 'Unlike'),
-    )
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_answer_likes')
-    liked_answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name='answer_like_rel')
-    value = models.CharField(choices=LIKE_CHOICES, default='Like', max_length=10)
+# class AnswerLike(models.Model):
+#     LIKE_CHOICES = (
+#         ('like', 'Like'),
+#         ('Unlike', 'Unlike'),
+#     )
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_answer_likes')
+#     liked_answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name='answer_like_rel')
+#     value = models.CharField(choices=LIKE_CHOICES, default='Like', max_length=10)
 
 
 # class Tag(models.Model):
