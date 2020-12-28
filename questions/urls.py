@@ -5,7 +5,6 @@ app_name = 'questions'
 
 urlpatterns = [
     path('', views.HomeTemplateView.as_view(), name='home'),
-    # path('questions/', views.questions_view, name='all_questions'),
     path('questions/', views.QuestionListView.as_view(), name='all_questions'),
     # path('add_question', views.add_question, name='add_question'),
     path('add_question/', views.QuestionCreateView.as_view(), name='add_question'),

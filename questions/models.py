@@ -62,6 +62,10 @@ class Answer(models.Model):
         # ordering = want to be num of likes but how?
         db_table = 'answer'
 
+    def get_num_of_likes(self):
+        num_likes = self.likes.count()
+        return num_likes
+
 
 
 # class AnswerLike(models.Model):

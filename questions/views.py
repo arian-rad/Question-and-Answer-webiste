@@ -34,6 +34,13 @@ class AnswerLikeCreateVeiw(CreateView):
     def post(self, request, pk):
         answer = get_object_or_404(Answer, id=request.POST.get('answer_id'))
         answer.likes.add(request.user)
+        liked = False
+        if answer.likes.filter(id=request.user.id).exists():
+            answer.likes.remove(request.user)
+            liked = False
+        else:
+            answer.likes.add(request.user)
+        print(f'liked by {request.user.username}')
         return HttpResponseRedirect(reverse('questions:question_detail', args=[str(pk)]))
 
 
@@ -43,7 +50,13 @@ class QuestionDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['answers'] = self.object.question_answers.all()
+        # answer = get_object_or_404(Answer, id=self.context['pk'])
+        #answer = get_object_or_404(Answer, id=self.kwargs['pk'])
         # context['category1'] = self.object.category
+        #liked = False
+        #if answer.likes.filter(id=self.request.user.id).exists():
+            #liked = True
+        #context['liked'] = liked
         self.object.num_of_views += 1
         self.object.save()
         self.object.refresh_from_db()

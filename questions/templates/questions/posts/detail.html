@@ -22,9 +22,15 @@
       <div class="card-body">
         <h6 class="card-subtitle mb-2 text-muted">By :{{ans.author.username}}</h6>
         <p class="card-text">{{ ans.body | safe }}</p>
-        <form method="POST">
+        <p class="card-text text-muted mt-4">likes:{{ans.get_num_of_likes}}</p>
+        <form method="POST" action="{% url 'questions:like_answer' ans.id %}">
           {% csrf_token %}
-          <button  action="{% url 'questions:like_answer' ans.id %}" class="btn btn-primary btn-sm" type="submit" name="answer_id" value="{{ ans.id }}">upvote</button>
+
+<!--            <button class="btn btn-danger btn-sm" type="submit" name="answer_id" value="{{ ans.id }}">UnLike</button>-->
+
+              <button class="btn btn-success btn-sm" type="submit" name="answer_id" value="{{ ans.id }}">Like</button>
+
+
         </form>
       </div>
     </div>
