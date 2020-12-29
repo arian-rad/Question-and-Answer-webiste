@@ -11,8 +11,8 @@ class CategoryAdmin(admin.ModelAdmin):
 class QuestionAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     readonly_fields = ('num_of_views',)
-    list_display = ('title', 'user', 'category', 'num_of_views', 'date_created',)
+    list_display = ('id', 'title', 'user', 'category', 'num_of_views', 'date_created',)
 
 @admin.register(Answer)
 class AnswerAdmin(admin.ModelAdmin):
-    list_display = ('author', 'date_created',)
+    list_display = ('id', 'body', 'author', 'date_created',)

@@ -20,10 +20,17 @@ class QuestionListView(ListView):
     model = Question
     template_name = 'questions/posts/allPosts.html'
 
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     """Handling likes for the questions in Question List View"""
+    #     question = get_object_or_404(Question, id=self.kwargs['pk'])
+    #     question_liked = False
+    #     if question.likes.filter(id=self.request.user.id).exists():
+    #         question_liked = True
+    #     context['question_liked'] = question_liked
+    #
+    #     return context
 
-# def question_detail_view(request, question_id):
-#     question = get_object_or_404(Question, id=question_id)
-#     return render(request, 'questions/posts/detail.html', {'question':question})
 
 @method_decorator(login_required, name='dispatch')
 class AnswerLikeCreateVeiw(CreateView):
@@ -33,15 +40,42 @@ class AnswerLikeCreateVeiw(CreateView):
 
     def post(self, request, pk):
         answer = get_object_or_404(Answer, id=request.POST.get('answer_id'))
-        answer.likes.add(request.user)
+        # answer.likes.add(request.user)
         liked = False
         if answer.likes.filter(id=request.user.id).exists():
             answer.likes.remove(request.user)
+            print(f'ANSWER UNLIKED by {request.user.username}')
             liked = False
         else:
             answer.likes.add(request.user)
-        print(f'liked by {request.user.username}')
+            print(f'ANSWER liked by {request.user.username}')
+
+        related_question_id = answer.related_question.id
+        # return HttpResponseRedirect(reverse('questions:question_detail', args=[str(pk)]))
+        return HttpResponseRedirect(reverse('questions:question_detail', args=[str(related_question_id)]))
+
+
+
+@method_decorator(login_required, name='dispatch')
+class QuestionLikeCreateView(CreateView):
+    model = Question
+    template_name = 'questions/posts/detail.html'
+    success_url = reverse_lazy('questions:question_detail')
+
+    def post(self, request, pk):
+        question = get_object_or_404(Question, id=request.POST.get('question_id'))
+        # question.likes.add(request.user)
+        #question_liked = False
+        if question.likes.filter(id=request.user.id).exists():
+            print(f'Question UNLIKED by {request.user.username}')
+            question.likes.remove(request.user)
+            #question_liked = False
+        else:
+            question.likes.add(request.user)
+            print(f'Question liked by {request.user.username}')
+
         return HttpResponseRedirect(reverse('questions:question_detail', args=[str(pk)]))
+
 
 
 class QuestionDetailView(DetailView):
@@ -50,16 +84,32 @@ class QuestionDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['answers'] = self.object.question_answers.all()
-        # answer = get_object_or_404(Answer, id=self.context['pk'])
-        answer = get_object_or_404(Answer, id=self.kwargs['pk'])
+        # answer = get_object_or_404(Answer, id=self.object.context['pk'])
         # context['category1'] = self.object.category
-        liked = False
+
+        """Handling likes for answers"""
+        answer = get_object_or_404(Answer, related_question=self.kwargs['pk'])
+        print('tst',self.request.POST.get('answer_id')) #NONE
+
+        # temp = AnswerLikeCreateVeiw.post(request=self.request,)
+        # answer = Answer.objects.get(id=self.request.GET.get('answer_id'))
+
+        answer_liked = False
         if answer.likes.filter(id=self.request.user.id).exists():
-            liked = True
-        context['liked'] = liked
+            answer_liked = True
+        context['answer_liked'] = answer_liked
+
+        """Handling likes for the questions"""
+        question = get_object_or_404(Question, id=self.kwargs['pk'])
+        question_liked = False
+        if question.likes.filter(id=self.request.user.id).exists():
+            question_liked = True
+        context['question_liked'] = question_liked
+
         self.object.num_of_views += 1
         self.object.save()
         self.object.refresh_from_db()
+
         return context
 
 

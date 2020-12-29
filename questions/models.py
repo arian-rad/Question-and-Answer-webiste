@@ -32,6 +32,7 @@ class Question(models.Model):
     # to edit DateTime field P.S: blank and null are False by default
     category = models.ForeignKey(Category, on_delete=models.CASCADE ,verbose_name='دسته بندی', related_name='category_questions')    
     num_of_views = models.IntegerField(default=0, verbose_name='تعداد بازدید')
+    likes = models.ManyToManyField(User, default=None, blank=True, related_name='like_questions')
     # approved_answer = BooleanField(default=False)
 
     def get_num_of_answers(self):
@@ -46,6 +47,16 @@ class Question(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_num_of_likes(self):
+        num_likes = self.likes.count()
+        return num_likes
+
+    def get_like_status(self,request,id):
+        if self.likes.filter(id=self.request.user.id).exists():
+            return True
+        else:
+            return False
 
 
 class Answer(models.Model):
@@ -65,6 +76,14 @@ class Answer(models.Model):
     def get_num_of_likes(self):
         num_likes = self.likes.count()
         return num_likes
+
+    def get_likea_status(self,request, id):
+        if self.likes.filter(id=self.request.user.id).exists():
+            return True
+        else:
+            return False
+
+
 
 
 
