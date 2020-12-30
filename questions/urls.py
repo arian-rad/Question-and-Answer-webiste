@@ -15,4 +15,7 @@ urlpatterns = [
     path('create_answer/<int:pk>/', views.AnswerCreateView.as_view(), name='create_answer'),
     path('like/<int:pk>/', views.AnswerLikeCreateVeiw.as_view(), name='like_answer'),
     path('like-question/<int:pk>/', views.QuestionLikeCreateView.as_view(), name='like_question'),
+    path('report/<int:pk>/', views.ReportCreateView.as_view(), name='report'),
+    path('report/success/',views.ReportSuccessTemplateView.as_view(), name='report-success'),
+
 ]

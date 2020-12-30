@@ -3,6 +3,22 @@ from django.db import models
 from accounts.models import User
 from django.conf import settings
 from ckeditor.fields import RichTextField
+from django.utils.text import slugify
+
+# needs makemigrations and migrate Arian Radmehr 12:16pm-12/30/2020
+
+
+class Tag(models.Model):
+    title = models.CharField(max_length=100, verbose_name='برچسب')
+
+    class Meta:
+        verbose_name = 'برچسب'
+        verbose_name_plural = 'برچسب ها'
+        db_table = 'tag'
+
+    def get_trend_number(self):
+        tag = Question.tag_questions.filter(id=self.id)
+        return tag.count()
 
 
 class Category(models.Model):
@@ -33,6 +49,7 @@ class Question(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE ,verbose_name='دسته بندی', related_name='category_questions')    
     num_of_views = models.IntegerField(default=0, verbose_name='تعداد بازدید')
     likes = models.ManyToManyField(User, default=None, blank=True, related_name='like_questions')
+    tags = models.ManyToManyField(Tag, default=None, blank=True, verbose_name='برچسب', related_name ='tag_questions')
     # approved_answer = BooleanField(default=False)
 
     def get_num_of_answers(self):
@@ -57,6 +74,9 @@ class Question(models.Model):
             return True
         else:
             return False
+    def save(self, **kwargs):
+        self.slug = slugify(self.title, allow_unicode=True)
+        super(Question, self).save(**kwargs)
 
 
 class Answer(models.Model):
@@ -77,24 +97,32 @@ class Answer(models.Model):
         num_likes = self.likes.count()
         return num_likes
 
-    def get_likea_status(self,request, id):
+    def get_like_status(self,request, id):
         if self.likes.filter(id=self.request.user.id).exists():
             return True
         else:
             return False
 
 
+class Report(models.Model):
+    class Meta:
+        verbose_name = 'تخلفات'
+        verbose_name_plural = 'تخلفات'
+        ordering = ('-date',) # - is because we want to see the latest questions first!
+        db_table = 'report'
+
+    REPORT_CHOICES = (
+        ('other', 'دیگر موارد'),
+        ('politic', 'مورد سیاسی'),
+        ('swearing', 'الفاظ رکیک'),
+        ('non-relative-tag', 'برچسب غیر مربوط'),
+    )
+
+    title = models.CharField(max_length=20, choices=REPORT_CHOICES, default='other', verbose_name='عنوان گزارش')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=settings.AUTH_USER_MODEL, verbose_name='گزارش دهنده', related_name='user_reports')
+    additional_message = models.TextField(max_length=150, verbose_name='توضیحات بیشتر')
+    reported_question = models.ForeignKey(Question, on_delete=models.CASCADE, verbose_name='سوال مشکلدار', default=None, null=True, blank=True)
+    reported_answer = models.ForeignKey(Answer, on_delete=models.CASCADE, verbose_name='پاسخ مشکلدار', default = None, null=True, blank = True)
+    date = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد گزارش')
 
 
-
-# class AnswerLike(models.Model):
-#     LIKE_CHOICES = (
-#         ('like', 'Like'),
-#         ('Unlike', 'Unlike'),
-#     )
-#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_answer_likes')
-#     liked_answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name='answer_like_rel')
-#     value = models.CharField(choices=LIKE_CHOICES, default='Like', max_length=10)
-
-
-# class Tag(models.Model):

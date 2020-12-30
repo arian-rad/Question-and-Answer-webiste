@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from questions.models import Question, Category, Answer
-from questions.forms import QuestionForm, AnswerForm
+from questions.models import Question, Category, Answer, Report
+from questions.forms import QuestionForm, AnswerForm, ReportForm
 from django.views.generic import TemplateView, ListView, DetailView, CreateView
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.decorators import login_required
@@ -19,6 +19,7 @@ class AboutTemplateView(TemplateView):
 class QuestionListView(ListView):
     model = Question
     template_name = 'questions/posts/allPosts.html'
+
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
@@ -95,9 +96,9 @@ class QuestionDetailView(DetailView):
         for ans in answers:
             if ans.likes.filter(id=self.request.user.id).exists():
                 answer_liked[ans.id] = True
-            else:
-                answer_liked[ans.id] = False
-            print(f'answer_liked [{ans.id}] = {answer_liked[ans.id]}')
+            # else:
+            #     answer_liked[ans.id] = False
+            # print(f'answer_liked [{ans.id}] = {answer_liked[ans.id]}')
 
 
         # answer_liked = False
@@ -175,3 +176,38 @@ class AnswerCreateView(CreateView):
             answer = Answer(body=cleaned_data['body'], related_question=question, author=current_user)
             answer.save()
             return redirect('questions:question_detail', pk)
+
+
+class ReportCreateView(CreateView):
+    model = Report
+    template_name = 'questions/report/report_form.html'
+    form_class = ReportForm
+    success_url = reverse_lazy('questions:report-success')
+    # query parameter
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['answer_id'] = self.request.GET.get('answer_id')
+        return context
+
+
+
+    def post(self, request, pk):
+        report_form = ReportForm(request.POST)
+        if report_form.is_valid():
+            cleaned_data = report_form.cleaned_data
+            current_user = request.user
+            #reported_question = get_object_or_404(Question, id=pk)
+            reported_answer = get_object_or_404(Answer, id=pk)
+
+            report = Report(reported_question=None, reported_answer=reported_answer, title=cleaned_data['title'], additional_message=cleaned_data['additional_message'], user=current_user)
+
+            report.save()
+            print(self.get_context_data(self,**kwargs)['answer_id'])
+            return redirect('questions:report-success')
+
+
+
+class ReportSuccessTemplateView(TemplateView):
+    template_name = template_name = 'questions/report/success_template.html'
+

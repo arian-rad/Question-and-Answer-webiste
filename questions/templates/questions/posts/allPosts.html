@@ -15,12 +15,22 @@
         <a href="{% url 'questions:category_detail' question.category.id %}" class="btn btn-info btn-sm">{{question.category}}</a>
         <br>
         <p class="card-text text-muted mt-4">views:{{question.num_of_views}}</p>
+
+<!--        <form method="POST" action="{% url 'questions:like_question' question.id %}">-->
+<!--          {% csrf_token %}-->
+<!--            {% if question_liked %}-->
+<!--              <button class="btn btn-danger btn-sm" type="submit" name="question_id" value="{{ question.id }}">UnLike</button>-->
+<!--            {% else %}-->
+<!--              <button class="btn btn-success btn-sm" type="submit" name="question_id" value="{{ question.id }}">Like</button>-->
+<!--            {% endif %}-->
+<!--        </form>-->
+
         <p class="card-text text-muted mt-4">Answers:{{question.get_num_of_answers}}</p>
-        <a href="{% url 'questions:question_detail' question.id %}" class="card-link">more</a>
+        <a href="{% url 'questions:question_detail' question.id  %}" class="card-link">more</a>
         {% if question.get_num_of_answers == 0%}
-        <a href="{% url 'questions:create_answer' question.id %}" class="card-link">be the first person to answer!</a>
+        <a href="{% url 'questions:create_answer' question.id  %}" class="card-link">be the first person to answer!</a>
         {% else %}
-        <a href="{% url 'questions:create_answer' question.id %}" class="card-link">answer</a>
+        <a href="{% url 'questions:create_answer' question.id  %}" class="card-link">answer</a>
         {% endif %}
 
 
