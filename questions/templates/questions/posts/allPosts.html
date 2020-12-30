@@ -26,7 +26,7 @@
 <!--        </form>-->
 
         <p class="card-text text-muted mt-4">Answers:{{question.get_num_of_answers}}</p>
-        <a href="{% url 'questions:question_detail' question.id  %}" class="card-link">more</a>
+        <a href="{% url 'questions:question_detail' question.id question.slug %}" class="card-link">more</a>
         {% if question.get_num_of_answers == 0%}
         <a href="{% url 'questions:create_answer' question.id  %}" class="card-link">be the first person to answer!</a>
         {% else %}

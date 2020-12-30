@@ -9,7 +9,8 @@
       <p class="card-text">{{question.text | safe}}</p>
       <a href="{% url 'questions:category_detail' question.category.pk %}" class="btn btn-info btn-sm">{{question.category}}</a>
       <br><br>
-      <form method="POST" action="{% url 'questions:like_question' question.id %}">
+<!--  like for question -->
+      <form method="POST" action="{% url 'questions:like_question' question.id  %}">
           {% csrf_token %}
             {% if question_liked %}
               <button class="btn btn-danger btn-sm" type="submit" name="question_id" value="{{ question.id }}">UnLike</button>
