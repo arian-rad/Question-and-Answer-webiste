@@ -1,14 +1,15 @@
 {% extends 'layouts/base.html' %}
+{% load static %}
 
 {% block content %}
 <div class="ml-5">
     <div>
         <h1>we are Asqar.ir !!</h1>
         <h2>Our profesional Python-Django team members:</h2>
-        <h3 class="font-italic">Nafise, Maede, Amir, Parham, Omid, Mohammad Reza, Rouholah, Akhsham, Arian </h3> 
+        <h3 class="font-italic">Nafise, Maede, Amir, Parham, Omid, Mohammad Reza, Rouholah, Arian </h3>
         
     </div>
-    <img src="https://www.udaipurwebdesigner.in/wp-content/uploads/2019/08/about-us-title-img.png" class="img-fluid" alt="Responsive image">
+    <img src="{% static 'images/about/about-us-title-img.png' %}" class="img-fluid" alt="Responsive image">
 </div>
       
 {% endblock %}

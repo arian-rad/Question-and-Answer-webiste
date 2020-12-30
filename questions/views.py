@@ -40,12 +40,11 @@ class AnswerLikeCreateVeiw(CreateView):
 
     def post(self, request, pk):
         answer = get_object_or_404(Answer, id=request.POST.get('answer_id'))
-        # answer.likes.add(request.user)
-        liked = False
+        # liked = False
         if answer.likes.filter(id=request.user.id).exists():
             answer.likes.remove(request.user)
             print(f'ANSWER UNLIKED by {request.user.username}')
-            liked = False
+            # liked = False
         else:
             answer.likes.add(request.user)
             print(f'ANSWER liked by {request.user.username}')
@@ -64,7 +63,6 @@ class QuestionLikeCreateView(CreateView):
 
     def post(self, request, pk):
         question = get_object_or_404(Question, id=request.POST.get('question_id'))
-        # question.likes.add(request.user)
         #question_liked = False
         if question.likes.filter(id=request.user.id).exists():
             print(f'Question UNLIKED by {request.user.username}')
@@ -88,16 +86,25 @@ class QuestionDetailView(DetailView):
         # context['category1'] = self.object.category
 
         """Handling likes for answers"""
-        answer = get_object_or_404(Answer, related_question=self.kwargs['pk'])
+        # !!answer = get_object_or_404(Answer, related_question=self.kwargs['pk'])
         print('tst',self.request.POST.get('answer_id')) #NONE
 
         # temp = AnswerLikeCreateVeiw.post(request=self.request,)
-        # answer = Answer.objects.get(id=self.request.GET.get('answer_id'))
+        answers = Answer.objects.filter(related_question=self.kwargs['pk'])
+        answer_liked = {}
+        for ans in answers:
+            if ans.likes.filter(id=self.request.user.id).exists():
+                answer_liked[ans.id] = True
+            else:
+                answer_liked[ans.id] = False
+            print(f'answer_liked [{ans.id}] = {answer_liked[ans.id]}')
 
-        answer_liked = False
-        if answer.likes.filter(id=self.request.user.id).exists():
-            answer_liked = True
+
+        # answer_liked = False
+        # if answer.likes.filter(id=self.request.user.id).exists():
+        #     answer_liked = True
         context['answer_liked'] = answer_liked
+        # context['answers'] = answers
 
         """Handling likes for the questions"""
         question = get_object_or_404(Question, id=self.kwargs['pk'])
