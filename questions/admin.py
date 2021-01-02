@@ -1,5 +1,5 @@
 from django.contrib import admin
-from questions.models import Question, Category, Answer, Report
+from questions.models import Question, Category, Answer, QuestionReport, AnswerReport, Tag
 
 
 @admin.register(Category)
@@ -17,6 +17,16 @@ class QuestionAdmin(admin.ModelAdmin):
 class AnswerAdmin(admin.ModelAdmin):
     list_display = ('id', 'body', 'author', 'date_created',)
 
-@admin.register(Report)
-class ReportAdmin(admin.ModelAdmin):
+@admin.register(QuestionReport)
+class QuestionReportAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'user', 'date',)
+
+@admin.register(AnswerReport)
+class AnswerReportAdmin(admin.ModelAdmin):
+    # def get_reported_user_id(self):
+    #     reported_answer =
+    list_display = ('id', 'title', 'user', 'date',)
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('title',)

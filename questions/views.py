@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from questions.models import Question, Category, Answer, Report
-from questions.forms import QuestionForm, AnswerForm, ReportForm
+from questions.models import Question, Category, Answer, QuestionReport, AnswerReport, Tag
+from questions.forms import QuestionForm, AnswerForm, AnswerReportForm, QuestionReportForm
 from django.views.generic import TemplateView, ListView, DetailView, CreateView
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.http import HttpResponseRedirect
+from django.contrib.contenttypes.models import ContentType
 
 
 class HomeTemplateView(TemplateView):
@@ -31,6 +32,7 @@ class QuestionListView(ListView):
     #     context['question_liked'] = question_liked
     #
     #     return context
+
 
 
 @method_decorator(login_required, name='dispatch')
@@ -120,10 +122,23 @@ class QuestionCreateView(CreateView):
 
     def post(self, request):
         question_form = QuestionForm(request.POST)
-        if question_form.is_valid():
+        print("test11")
+        if question_form.is_valid(): # doesnt pass this if!
+            print("test12")
             cleaned_data = question_form.cleaned_data
+            print("test13")
             current_user = request.user
+            print("test14")
             question = Question(title=cleaned_data['title'], text=cleaned_data['text'], category=cleaned_data['category'], user=current_user)
+            question.save(commit=False)
+            print("test")
+            list_of_tags = cleaned_data['tags'].split()
+            tags_set = set({})
+            tags_set.update(list_of_tags)
+            for tag in tags_set:
+                tag_obj = Tag.objects.get_object_or_create(title=tag.title)[0] # get_or_create returns a tuple!
+                question.tags.add(*list(tags_set))
+
             question.save()
             return redirect('questions:all_questions')
 
@@ -156,35 +171,42 @@ class AnswerCreateView(CreateView):
             answer.save()
             return redirect('questions:question_detail', pk, question.slug)
 
-
-class ReportCreateView(CreateView):
-    model = Report
+@method_decorator(login_required, name='dispatch')
+class QuestionReportCreateView(CreateView):
+    model = QuestionReport
     template_name = 'questions/report/report_form.html'
-    form_class = ReportForm
+    form_class = QuestionReportForm
     success_url = reverse_lazy('questions:report-success')
-    # query parameter
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['answer_id'] = self.request.GET.get('answer_id')
-        return context
-
 
 
     def post(self, request, pk):
-        report_form = ReportForm(request.POST)
+        report_form = QuestionReportForm(request.POST)
         if report_form.is_valid():
             cleaned_data = report_form.cleaned_data
             current_user = request.user
-            #reported_question = get_object_or_404(Question, id=pk)
-            reported_answer = get_object_or_404(Answer, id=pk)
-
-            report = Report(reported_question=None, reported_answer=reported_answer, title=cleaned_data['title'], additional_message=cleaned_data['additional_message'], user=current_user)
-
+            reported_question = get_object_or_404(Question, id=pk)
+            report = QuestionReport(reported_question=reported_question, title=cleaned_data['title'], additional_message=cleaned_data['additional_message'], user=current_user)
             report.save()
-            print(self.get_context_data(self,**kwargs)['answer_id'])
             return redirect('questions:report-success')
 
+
+@method_decorator(login_required, name='dispatch')
+class AnswerReportCreateView(CreateView):
+    model = AnswerReportForm
+    template_name = 'questions/report/report_form.html'
+    form_class = AnswerReportForm
+    success_url = reverse_lazy('questions:report-success')
+
+
+    def post(self, request, pk):
+        report_form = AnswerReportForm(request.POST)
+        if report_form.is_valid():
+            cleaned_data = report_form.cleaned_data
+            current_user = request.user
+            reported_answer = get_object_or_404(Question, id=pk)
+            report = AnswerReport(reported_answer=reported_answer, title=cleaned_data['title'], additional_message=cleaned_data['additional_message'], user=current_user)
+            report.save()
+            return redirect('questions:report-success')
 
 
 class ReportSuccessTemplateView(TemplateView):

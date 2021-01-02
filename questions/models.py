@@ -5,8 +5,6 @@ from django.conf import settings
 from ckeditor.fields import RichTextField
 from django.utils.text import slugify
 
-# needs makemigrations and migrate Arian Radmehr 12:16pm-12/30/2020
-
 
 class Tag(models.Model):
     title = models.CharField(max_length=100, verbose_name='برچسب')
@@ -16,9 +14,9 @@ class Tag(models.Model):
         verbose_name_plural = 'برچسب ها'
         db_table = 'tag'
 
-    def get_trend_number(self):
-        tag = Question.tag_questions.filter(id=self.id)
-        return tag.count()
+    # def get_trend_number(self):
+    #     tag = Question.tag_questions.filter(id=self.id)
+    #     return tag.count()
 
 
 class Category(models.Model):
@@ -62,6 +60,7 @@ class Question(models.Model):
         ordering = ('-date_created',) # - is because we want to see the latest questions first!
         db_table = 'question'
 
+
     def __str__(self):
         return self.title
 
@@ -104,12 +103,12 @@ class Answer(models.Model):
             return False
 
 
-class Report(models.Model):
+class QuestionReport(models.Model):
     class Meta:
-        verbose_name = 'تخلفات'
-        verbose_name_plural = 'تخلفات'
+        verbose_name = 'تخلفات در سوال'
+        verbose_name_plural = 'تخلفات در سوالات'
         ordering = ('-date',) # - is because we want to see the latest questions first!
-        db_table = 'report'
+        db_table = 'QuestionReport'
 
     REPORT_CHOICES = (
         ('other', 'دیگر موارد'),
@@ -119,10 +118,31 @@ class Report(models.Model):
     )
 
     title = models.CharField(max_length=20, choices=REPORT_CHOICES, default='other', verbose_name='عنوان گزارش')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=settings.AUTH_USER_MODEL, verbose_name='گزارش دهنده', related_name='user_reports')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=settings.AUTH_USER_MODEL, verbose_name='گزارش دهنده', related_name='user_question_reports')
     additional_message = models.TextField(max_length=150, verbose_name='توضیحات بیشتر')
     reported_question = models.ForeignKey(Question, on_delete=models.CASCADE, verbose_name='سوال مشکلدار', default=None, null=True, blank=True)
-    reported_answer = models.ForeignKey(Answer, on_delete=models.CASCADE, verbose_name='پاسخ مشکلدار', default = None, null=True, blank = True)
+    date = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد گزارش')
+
+
+
+class AnswerReport(models.Model):
+    class Meta:
+        verbose_name = 'تخلفات در جواب'
+        verbose_name_plural = 'تخلفات در جواب ها'
+        ordering = ('-date',) # - is because we want to see the latest questions first!
+        db_table = 'AnswerReport'
+
+    REPORT_CHOICES = (
+        ('other', 'دیگر موارد'),
+        ('politic', 'مورد سیاسی'),
+        ('swearing', 'الفاظ رکیک'),
+        ('non-relative-tag', 'برچسب غیر مربوط'),
+    )
+
+    title = models.CharField(max_length=20, choices=REPORT_CHOICES, default='other', verbose_name='عنوان گزارش')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=settings.AUTH_USER_MODEL, verbose_name='گزارش دهنده', related_name='user_answer_reports')
+    additional_message = models.TextField(max_length=150, verbose_name='توضیحات بیشتر')
+    reported_answer = models.ForeignKey(Question, on_delete=models.CASCADE, verbose_name='پاسخ مشکلدار', default=None, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد گزارش')
 
 

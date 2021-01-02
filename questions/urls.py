@@ -13,9 +13,10 @@ urlpatterns = [
     path('about/', views.AboutTemplateView.as_view(), name='about'),
     path('category/<int:pk>/questions/', views.CategoryQuestionsDetailView.as_view(), name='category_detail'),
     path('create_answer/<int:pk>/', views.AnswerCreateView.as_view(), name='create_answer'),
-    path('like/<int:pk>/', views.AnswerLikeCreateVeiw.as_view(), name='like_answer'),
+    path('like-answer/<int:pk>/', views.AnswerLikeCreateVeiw.as_view(), name='like_answer'),
     path('like-question/<int:pk>/', views.QuestionLikeCreateView.as_view(), name='like_question'),
-    path('report/<int:pk>/', views.ReportCreateView.as_view(), name='report'),
+    path('report-question/<int:pk>/', views.QuestionReportCreateView.as_view(), name='report'),
+    path('report-answer/<int:pk>/', views.AnswerReportCreateView.as_view(), name='report'),
     path('report/success/',views.ReportSuccessTemplateView.as_view(), name='report-success'),
 
 ]
