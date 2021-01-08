@@ -122,25 +122,21 @@ class QuestionCreateView(CreateView):
 
     def post(self, request):
         question_form = QuestionForm(request.POST)
-        print("test11")
-        if question_form.is_valid(): # doesnt pass this if!
-            print("test12")
+
+        if question_form.is_valid():
             cleaned_data = question_form.cleaned_data
-            print("test13")
             current_user = request.user
-            print("test14")
             question = Question(title=cleaned_data['title'], text=cleaned_data['text'], category=cleaned_data['category'], user=current_user)
-            question.save(commit=False)
-            print("test")
-            list_of_tags = cleaned_data['tags'].split()
+            list_of_tags = cleaned_data['tag_input'].split()
             tags_set = set({})
             tags_set.update(list_of_tags)
-            for tag in tags_set:
-                tag_obj = Tag.objects.get_object_or_create(title=tag.title)[0] # get_or_create returns a tuple!
-                question.tags.add(*list(tags_set))
-
             question.save()
+            for tag in tags_set:
+                tag_obj = Tag.objects.get_or_create(title=tag)[0] # get_or_create returns a tuple!
+                question.tags.add(tag_obj)
+
             return redirect('questions:all_questions')
+
 
 
 

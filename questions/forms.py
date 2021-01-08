@@ -2,15 +2,12 @@ from django import forms
 from questions.models import Question, Answer, QuestionReport, AnswerReport
 
 class QuestionForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(QuestionForm, self).__init__(*args, **kwargs)
-        self.fields['tags'].required = False
+    tag_input = forms.CharField()
+
     class Meta:
         model = Question
-        fields = ('title', 'text', 'category', 'tags' )
-        widgets = {
-            'tags': forms.Textarea(attrs={'cols': 80, 'rows': 1}),
-        }
+        fields = ('title', 'text', 'category',)
+
 
 class AnswerForm(forms.ModelForm):
     class Meta:

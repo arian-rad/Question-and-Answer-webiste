@@ -24,6 +24,10 @@
       <p class="card-text text-muted mt-4">likes:{{question.get_num_of_likes}}</p>
       <a href="{% url 'questions:create_answer' question.id  %}" class="card-link">answer</a>
       <a href="{% url 'questions:report' question.id %}" class="card-link">report question</a>
+      {% for tag in question.tags.all %}
+      <p class="card-text text-muted mt-4">tags:{{tag.title}}</p>
+
+      {% endfor %}
     </div>
   </div>
 
