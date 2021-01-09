@@ -2,7 +2,7 @@ from django import forms
 from questions.models import Question, Answer, QuestionReport, AnswerReport
 
 class QuestionForm(forms.ModelForm):
-    tag_input = forms.CharField()
+    tag_input = forms.CharField(label='Tags')
 
     class Meta:
         model = Question

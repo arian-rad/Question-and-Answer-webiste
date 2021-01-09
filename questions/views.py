@@ -22,19 +22,6 @@ class QuestionListView(ListView):
     template_name = 'questions/posts/allPosts.html'
 
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     """Handling likes for the questions in Question List View"""
-    #     question = get_object_or_404(Question, id=self.kwargs['pk'])
-    #     question_liked = False
-    #     if question.likes.filter(id=self.request.user.id).exists():
-    #         question_liked = True
-    #     context['question_liked'] = question_liked
-    #
-    #     return context
-
-
-
 @method_decorator(login_required, name='dispatch')
 class AnswerLikeCreateVeiw(CreateView):
     model = Answer
@@ -102,13 +89,6 @@ class QuestionDetailView(DetailView):
         return context
 
 
-# class QuestionCreateView(CreateView):
-#     model = Question
-#     form_class = QuestionForm
-#     template_name = 'questions/posts/add_question.html'
-#     success_url = reverse_lazy('questions:all_questions')
-
-
 @method_decorator(login_required, name='dispatch')
 class QuestionCreateView(CreateView):
     model = Question
@@ -149,6 +129,18 @@ class CategoryQuestionsDetailView(DetailView):
         context['cat_ques'] = context['category'].category_questions.all()  # related_name = category_questions
 
         return context
+
+
+class TagQuestionDetailView(DetailView):
+    model = Tag
+    template_name = 'questions/tags/tag_questions.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag_ques'] = context['tag'].tag_questions.all()
+
+        return context
+
 
 @method_decorator(login_required, name='dispatch')
 class AnswerCreateView(CreateView):

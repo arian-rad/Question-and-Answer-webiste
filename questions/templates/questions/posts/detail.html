@@ -22,12 +22,13 @@
         </form>
       <time class="card-subtitle mb-2 text-muted">{{question.date_created}}</time>
       <p class="card-text text-muted mt-4">likes:{{question.get_num_of_likes}}</p>
+      <strong class="card-text text-muted mt-4">Tags:</strong>
+      {% for tag in question.tags.all %}
+      <a class="card-text text-muted mt-4" href="{% url 'questions:tag_detail' tag.pk %}">{{tag.title}}</a>
+      {% endfor %}
+      <br>
       <a href="{% url 'questions:create_answer' question.id  %}" class="card-link">answer</a>
       <a href="{% url 'questions:report' question.id %}" class="card-link">report question</a>
-      {% for tag in question.tags.all %}
-      <p class="card-text text-muted mt-4">tags:{{tag.title}}</p>
-
-      {% endfor %}
     </div>
   </div>
 
