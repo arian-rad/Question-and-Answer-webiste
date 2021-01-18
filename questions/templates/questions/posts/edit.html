@@ -1,0 +1,17 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+    <form method='POST'>
+    {% csrf_token %}
+    {{ form.media }}
+
+
+
+
+
+    {{ form.as_p }}
+       برچسب: <input type="text" name="new_tags" value="{% for t in new_tags %} {{t}} {% endfor %}">
+ <br>
+        <input type="submit" value="update" class="btn btn-primary mt-4">
+    </form>
+{% endblock %}

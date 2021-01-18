@@ -18,6 +18,7 @@ urlpatterns = [
     path('report-question/<int:pk>/', views.QuestionReportCreateView.as_view(), name='report'),
     path('report-answer/<int:pk>/', views.AnswerReportCreateView.as_view(), name='report'),
     path('report/success/',views.ReportSuccessTemplateView.as_view(), name='report-success'),
-    path('tag/<int:pk>/questions/', views.TagQuestionDetailView.as_view(), name='tag_detail')
+    path('tag/<int:pk>/questions/', views.TagQuestionDetailView.as_view(), name='tag_detail'),
+    path('questions/<int:pk>/<str:slug>/edit/', views.QuestionUpdateView.as_view(), name='edit_question')
 
 ]

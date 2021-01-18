@@ -20,6 +20,9 @@
             {% endif %}
           {% endif %}
         </form>
+      {% if question.user.id == request.user.id %}
+      <a class="btn btn-warning mt-4" href="{% url 'questions:edit_question'  question.pk question.slug %}">edit</a>
+      {% endif %}
       <time class="card-subtitle mb-2 text-muted">{{question.date_created}}</time>
       <p class="card-text text-muted mt-4">likes:{{question.get_num_of_likes}}</p>
       <strong class="card-text text-muted mt-4">Tags:</strong>

@@ -1,9 +1,9 @@
 from django.db import models
-# from django.contrib.auth.models import User
 from accounts.models import User
 from django.conf import settings
 from ckeditor.fields import RichTextField
 from django.utils.text import slugify
+from django.urls import reverse_lazy, reverse
 
 
 class Tag(models.Model):
@@ -52,6 +52,9 @@ class Question(models.Model):
 
     def get_num_of_answers(self):
         return self.question_answers.count()
+
+    def get_absolute_url(self):
+        return reverse('questions:edit_question', kwargs={'pk': self.pk})
         
 
     class Meta:
@@ -68,11 +71,12 @@ class Question(models.Model):
         num_likes = self.likes.count()
         return num_likes
 
-    def get_like_status(self,request,id):
-        if self.likes.filter(id=self.request.user.id).exists():
-            return True
-        else:
-            return False
+    # def get_like_status(self,request,id):
+    #     if self.likes.filter(id=self.request.user.id).exists():
+    #         return True
+    #     else:
+    #         return False
+
     def save(self, **kwargs):
         self.slug = slugify(self.title, allow_unicode=True)
         super(Question, self).save(**kwargs)
@@ -119,7 +123,7 @@ class QuestionReport(models.Model):
 
     title = models.CharField(max_length=20, choices=REPORT_CHOICES, default='other', verbose_name='عنوان گزارش')
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=settings.AUTH_USER_MODEL, verbose_name='گزارش دهنده', related_name='user_question_reports')
-    additional_message = models.TextField(max_length=150, verbose_name='توضیحات بیشتر')
+    additional_message = models.TextField(max_length=150, verbose_name='توضیحات بیشتر', null=True, blank=True)
     reported_question = models.ForeignKey(Question, on_delete=models.CASCADE, verbose_name='سوال مشکلدار', default=None, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد گزارش')
 

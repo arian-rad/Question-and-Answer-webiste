@@ -2,7 +2,15 @@ from django import forms
 from questions.models import Question, Answer, QuestionReport, AnswerReport
 
 class QuestionForm(forms.ModelForm):
-    tag_input = forms.CharField(label='Tags')
+    tag_input = forms.CharField(label='Tags', required=False)
+
+    class Meta:
+        model = Question
+        fields = ('title', 'text', 'category',)
+
+
+class QuestionUpdateForm(forms.ModelForm):
+    new_tags = forms.CharField(label='Taag')
 
     class Meta:
         model = Question
