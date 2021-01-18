@@ -10,7 +10,7 @@ class QuestionForm(forms.ModelForm):
 
 
 class QuestionUpdateForm(forms.ModelForm):
-    new_tags = forms.CharField(label='Taag')
+    new_tags = forms.CharField(label='Taag', required=False)
 
     class Meta:
         model = Question
