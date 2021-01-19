@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from questions.models import Question, Category, Answer, QuestionReport, AnswerReport, Tag
 from questions.forms import QuestionForm, AnswerForm, AnswerReportForm, QuestionReportForm, QuestionUpdateForm
-from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -256,3 +256,11 @@ class QuestionUpdateView(UpdateView):
 
             question.save()
             return redirect('questions:all_questions')
+
+
+class QuestionDeleteView(DeleteView):
+    model = Question
+    success_url = reverse_lazy('questions:all_questions')
+    template_name = 'questions/posts/question_confirm_delete.html'
+
+

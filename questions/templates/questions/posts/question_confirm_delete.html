@@ -1,0 +1,18 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+
+    <div class="d-flex">
+        <div class="col-md-6">
+            <form method="POST">
+                {% csrf_token %}
+
+                <strong> Are you sure you want to delete {{ object.title }} question?</strong>
+                <br>
+                <input type="submit" value="yes" class="btn btn-primary btn-lg mt-5">
+                <a class="btn btn-success btn-lg mt-5 ml-4" href="{% url 'questions:all_questions' %}"> NO! take me back to all Questions</a>
+            </form>
+        </div>
+
+    </div>
+{% endblock %}
