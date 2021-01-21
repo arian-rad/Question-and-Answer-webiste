@@ -6,7 +6,8 @@
         <form method="post" class="mt-5">
             {% csrf_token %}
             {{ form.as_p}}
-            <input class="btn btn-primary" type="submit" value="sign up"></input>
+            <a href="{% url 'accounts:pass_change' %}">change your password here</a>
+            <input class="btn btn-primary" type="submit" value="edit"></input>
         </form>
     </div>
 </div>

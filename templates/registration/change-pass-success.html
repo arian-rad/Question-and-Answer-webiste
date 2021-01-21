@@ -2,13 +2,9 @@
 {% block content%}
 {% include 'layouts/inc/navbar.html' %}
 <div class="d-flex justify-content-center my-6 mt-5">
-    <div class="d-flex justify-content-center my-6 card col-md-5">
-        <form method="post" class="mt-5">
-            {% csrf_token %}
-            {{ form.as_p}}
-            <input class="btn btn-primary" type="submit" value="sign up"></input>
-        </form>
-    </div>
+
+        <h1>password changed successfully!</h1>
+
 </div>
 
 {% endblock %}

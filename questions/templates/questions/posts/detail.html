@@ -32,7 +32,9 @@
       {% endfor %}
       <br>
       <a href="{% url 'questions:create_answer' question.id  %}" class="card-link">answer</a>
+      {% if question.user.id != request.user.id %}
       <a href="{% url 'questions:report' question.id %}" class="card-link">report question</a>
+      {% endif %}
     </div>
   </div>
 
