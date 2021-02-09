@@ -3,7 +3,7 @@
 {% include 'layouts/inc/navbar.html' %}
 <div class="d-flex justify-content-center my-6 mt-5">
     <div class="d-flex justify-content-center my-6 card col-md-5">
-        <form method="post" class="mt-5">
+        <form method="post" class="mt-5" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p}}
             <a href="{% url 'accounts:pass_change' %}">change your password here</a>

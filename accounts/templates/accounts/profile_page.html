@@ -1,0 +1,21 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+<div class="card" style="width: 40rem;">
+    <div class="card-body">
+        <h5 class="card-title">{{user.username}}</h5>
+        <img class="rounded-circle z-depth-2" alt="profile picture" src="{{user.profile_image.url}}" style="width:250px; height:250px; ">
+        {% if user.bio%}
+            <p class="mt-5 border">{{user.bio}}</p>
+        {% endif %}
+        <div class="border-top">
+            <strong> questions asked: {{user.get_num_of_questions}} </strong>
+        <br>
+        <strong> answers: {{user.get_num_of_answers}} </strong>
+        </div>
+
+
+
+    </div>
+</div>
+{% endblock %}

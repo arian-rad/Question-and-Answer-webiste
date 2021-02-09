@@ -37,8 +37,8 @@ class AnswerLikeCreateVeiw(CreateView):
             answer.likes.add(request.user)
 
         related_question_id = answer.related_question.id
-        return HttpResponseRedirect(reverse('questions:question_detail', args=[str(related_question_id), answer.related_question.slug]))
-
+        return HttpResponseRedirect(
+            reverse('questions:question_detail', args=[str(related_question_id), answer.related_question.slug]))
 
 
 @method_decorator(login_required, name='dispatch')
@@ -57,10 +57,10 @@ class QuestionLikeCreateView(CreateView):
         return HttpResponseRedirect(reverse('questions:question_detail', args=[str(pk), question.slug]))
 
 
-
 class QuestionDetailView(DetailView):
     model = Question
     template_name = 'questions/posts/detail.html'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['answers'] = self.object.question_answers.all()
@@ -98,8 +98,8 @@ class QuestionCreateView(CreateView):
     success_url = reverse_lazy('questions:all_questions')
 
     def get(self, request):
-         question_form = QuestionForm()
-         return render(request,'questions/posts/add_question.html', {'form': question_form})
+        question_form = QuestionForm()
+        return render(request, 'questions/posts/add_question.html', {'form': question_form})
 
     def post(self, request):
         question_form = QuestionForm(request.POST)
@@ -107,17 +107,17 @@ class QuestionCreateView(CreateView):
         if question_form.is_valid():
             cleaned_data = question_form.cleaned_data
             current_user = request.user
-            question = Question(title=cleaned_data['title'], text=cleaned_data['text'], category=cleaned_data['category'], user=current_user)
+            question = Question(title=cleaned_data['title'], text=cleaned_data['text'],
+                                category=cleaned_data['category'], user=current_user)
             list_of_tags = cleaned_data['tag_input'].split()
             tags_set = set({})
             tags_set.update(list_of_tags)
             question.save()
             for tag in tags_set:
-                tag_obj = Tag.objects.get_or_create(title=tag)[0] # get_or_create returns a tuple!
+                tag_obj = Tag.objects.get_or_create(title=tag)[0]  # get_or_create returns a tuple!
                 question.tags.add(tag_obj)
 
             return redirect('questions:all_questions')
-
 
 
 class CategoryQuestionsDetailView(DetailView):
@@ -130,7 +130,7 @@ class CategoryQuestionsDetailView(DetailView):
         return context
 
 
-class TagQuestionDetailView(DetailView): # Views all questions related to a specific question
+class TagQuestionDetailView(DetailView):  # Views all questions related to a specific question
     model = Tag
     template_name = 'questions/tags/tag_questions.html'
 
@@ -157,6 +157,7 @@ class AnswerCreateView(CreateView):
             answer.save()
             return redirect('questions:question_detail', pk, question.slug)
 
+
 @method_decorator(login_required, name='dispatch')
 class QuestionReportCreateView(CreateView):
     model = QuestionReport
@@ -164,14 +165,14 @@ class QuestionReportCreateView(CreateView):
     form_class = QuestionReportForm
     success_url = reverse_lazy('questions:report-success')
 
-
     def post(self, request, pk):
         report_form = QuestionReportForm(request.POST)
         if report_form.is_valid():
             cleaned_data = report_form.cleaned_data
             current_user = request.user
             reported_question = get_object_or_404(Question, id=pk)
-            report = QuestionReport(reported_question=reported_question, title=cleaned_data['title'], additional_message=cleaned_data['additional_message'], user=current_user)
+            report = QuestionReport(reported_question=reported_question, title=cleaned_data['title'],
+                                    additional_message=cleaned_data['additional_message'], user=current_user)
             report.save()
             return redirect('questions:report-success')
 
@@ -183,14 +184,14 @@ class AnswerReportCreateView(CreateView):
     form_class = AnswerReportForm
     success_url = reverse_lazy('questions:report-success')
 
-
     def post(self, request, pk):
         report_form = AnswerReportForm(request.POST)
         if report_form.is_valid():
             cleaned_data = report_form.cleaned_data
             current_user = request.user
             reported_answer = get_object_or_404(Question, id=pk)
-            report = AnswerReport(reported_answer=reported_answer, title=cleaned_data['title'], additional_message=cleaned_data['additional_message'], user=current_user)
+            report = AnswerReport(reported_answer=reported_answer, title=cleaned_data['title'],
+                                  additional_message=cleaned_data['additional_message'], user=current_user)
             report.save()
             return redirect('questions:report-success')
 
@@ -214,18 +215,17 @@ class QuestionUpdateView(UpdateView):
             tag_list.append(t.title)
 
         question_form.fields['tag_input'].widget = forms.HiddenInput()
-        context = {# 'title': instance.title,
-                       # 'body': instance.text,
-                       # 'slug': instance.slug,
-                       # 'instance': instance
-                       'new_tags': tag_list,
-                       'form': question_form,
-                }
+        context = {  # 'title': instance.title,
+            # 'body': instance.text,
+            # 'slug': instance.slug,
+            # 'instance': instance
+            'new_tags': tag_list,
+            'form': question_form,
+        }
         print('context: ', context)
         print('form: ', type(context['form']['text']))
 
-        return render(request,'questions/posts/edit.html', context)
-
+        return render(request, 'questions/posts/edit.html', context)
 
     def post(self, request, **kwargs):
         question_form = QuestionUpdateForm(request.POST)
@@ -242,7 +242,6 @@ class QuestionUpdateView(UpdateView):
             tag_set = set({})
             tag_set.update(list_of_tags)
             print("NEW TAGS: ", list_of_tags)
-
 
             question.tags.clear()
 
@@ -262,5 +261,3 @@ class QuestionDeleteView(DeleteView):
     model = Question
     success_url = reverse_lazy('questions:all_questions')
     template_name = 'questions/posts/question_confirm_delete.html'
-
-
