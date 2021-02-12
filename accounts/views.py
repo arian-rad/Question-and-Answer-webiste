@@ -1,5 +1,5 @@
-from django.views.generic import CreateView, UpdateView, TemplateView, DetailView
-from accounts.models import User
+from django.views.generic import CreateView, UpdateView, TemplateView, DetailView, ListView
+from accounts.models import User, Notification
 from accounts.forms import SignupForm, EditProfileForm, PasswordResetForm
 from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordChangeView
@@ -33,9 +33,7 @@ class ShowProfileView(DetailView):
     model = User
     template_name = 'accounts/profile_page.html'
 
-    # def get_context_data(self, *args, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     print(context)
-    #     context['user'] = get_object_or_404(User, id=self.kwargs['pk'])
-    #     return context
 
+class NotificationView(ListView):
+    model = Notification
+    template_name = 'accounts/all_notifications.html'

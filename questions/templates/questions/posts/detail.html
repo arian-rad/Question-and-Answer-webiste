@@ -4,7 +4,8 @@
 {% block content %}
 <div class="card" style="width: 40rem;">
     <div class="card-body">
-      <h6 class="card-subtitle mb-2 text-muted">{{question.user}}</h6>
+<!--      <h6 class="card-subtitle mb-2 text-muted">{{question.user}}</h6>-->
+      <a href="{% url 'accounts:view_profile_page' question.user.pk %}" class="card-subtitle mb-2 text-muted">{{question.user}}</a>
       <h5 class="card-title">{{question.title}}</h5>
       <p class="card-text">{{question.text | safe}}</p>
       <a href="{% url 'questions:category_detail' question.category.pk %}" class="btn btn-info btn-sm">{{question.category}}</a>

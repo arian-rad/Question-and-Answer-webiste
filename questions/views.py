@@ -8,6 +8,7 @@ from django.utils.decorators import method_decorator
 from django.http import HttpResponseRedirect
 from django.contrib.contenttypes.models import ContentType
 from django import forms
+from accounts.models import Notification
 
 
 class HomeTemplateView(TemplateView):
@@ -33,8 +34,16 @@ class AnswerLikeCreateVeiw(CreateView):
         answer = get_object_or_404(Answer, id=request.POST.get('answer_id'))
         if answer.likes.filter(id=request.user.id).exists():
             answer.likes.remove(request.user)
+            Notification.objects.get(owner=answer.author, notifier=request.user, object_id=answer.id).delete()
         else:
             answer.likes.add(request.user)
+            Notification.objects.create(
+                owner=answer.author,
+                notifier=request.user,
+                message=f"{request.user.username} has liked the answer you gave to {answer.related_question.title} question",
+                content_type=ContentType.objects.get_for_model(Answer),
+                object_id=answer.id
+            )
 
         related_question_id = answer.related_question.id
         return HttpResponseRedirect(
@@ -51,8 +60,16 @@ class QuestionLikeCreateView(CreateView):
         question = get_object_or_404(Question, id=request.POST.get('question_id'))
         if question.likes.filter(id=request.user.id).exists():
             question.likes.remove(request.user)
+            Notification.objects.get(owner=question.user, notifier=request.user, object_id=question.id).delete()
         else:
             question.likes.add(request.user)
+            Notification.objects.create(
+                owner=question.user,
+                notifier=request.user,
+                message=f"{request.user.username} has liked your '{question.title}' question",
+                content_type=ContentType.objects.get_for_model(Question),
+                object_id=question.id
+            )
 
         return HttpResponseRedirect(reverse('questions:question_detail', args=[str(pk), question.slug]))
 
@@ -155,6 +172,14 @@ class AnswerCreateView(CreateView):
             question = get_object_or_404(Question, id=pk)
             answer = Answer(body=cleaned_data['body'], related_question=question, author=current_user)
             answer.save()
+            Notification.objects.create(
+                owner=question.user,
+                notifier=current_user,
+                message=f"{current_user.username} has an answer for your '{answer.related_question.title}' question",
+                content_type=ContentType.objects.get_for_model(Question),
+                object_id=question.id
+            )
+
             return redirect('questions:question_detail', pk, question.slug)
 
 

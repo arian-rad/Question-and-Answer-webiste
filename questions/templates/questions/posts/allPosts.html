@@ -8,7 +8,8 @@
   <div class="container m-5"  style="width: 40rem;"> 
     <div class="card">
       <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">By :{{question.user.username}}</h6>
+<!--        <h6 class="card-subtitle mb-2 text-muted">By :{{question.user.username}}</h6>-->
+        <a href="{% url 'accounts:view_profile_page' question.user.pk %}" class="card-subtitle mb-2 text-muted">By :{{question.user.username}}</a>
         <h4 class="card-title">{{question.title}}</h4>
         <p class="card-text">{{question.text | safe | truncatewords:20}}</p>
         <br>        

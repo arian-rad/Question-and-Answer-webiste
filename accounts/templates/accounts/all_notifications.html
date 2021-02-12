@@ -1,0 +1,14 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+{% for notification in object_list %}
+    <div class="card mt-5" style="width: 40rem;">
+    <div class="card-body ">
+        <div>
+            <p>{{notification.message}}</p>
+            <time class="card-subtitle mb-2 text-muted">{{notification.date}}</time>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

@@ -72,12 +72,6 @@ class Question(models.Model):
         num_likes = self.likes.count()
         return num_likes
 
-    # def get_like_status(self,request,id):
-    #     if self.likes.filter(id=self.request.user.id).exists():
-    #         return True
-    #     else:
-    #         return False
-
     def save(self, **kwargs):
         self.slug = slugify(self.title, allow_unicode=True)
         super(Question, self).save(**kwargs)
